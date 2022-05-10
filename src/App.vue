@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import TheSketchList from "@/components/TheSketchList.vue";
-
-await fetch("https://api.github.com/repos/mia-cx/csd/contents/sketches")
-  .then((res) => console.log(res.json()))
-  .catch((err) => {});
 </script>
 
 <template>
   <div class="container">
     <router-view></router-view>
-    <TheSketchList />
+    <TheSketchList id="index" />
   </div>
 </template>
 
@@ -27,6 +23,11 @@ await fetch("https://api.github.com/repos/mia-cx/csd/contents/sketches")
   margin-top: 32px;
 }
 
+#index {
+  border-style: dotted;
+  padding: 16px 16px;
+}
+
 .container {
   position: relative;
   border: dashed;
@@ -36,5 +37,6 @@ await fetch("https://api.github.com/repos/mia-cx/csd/contents/sketches")
   flex-direction: column;
   margin: auto;
   padding: 8px 24px;
+  max-width: 960px;
 }
 </style>
