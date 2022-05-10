@@ -17,7 +17,7 @@ export default {
       this.sketch?.remove();
       if (!this.name) return;
       let response = await modules[`../../sketches/${this.name}/sketch.ts`]();
-      this.sketch = new p5(response.default, "sketch");
+      this.sketch = new p5(response.default, document.getElementById("sketch"));
     },
   },
 

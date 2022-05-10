@@ -20,7 +20,7 @@ export default (p: p5) => {
   // let ballB = new object.Ball();
 
   p.setup = () => {
-    canvas.create(this);
+    canvas.create();
   };
 
   p.draw = () => {
