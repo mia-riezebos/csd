@@ -8,7 +8,7 @@ const routes = [
     component: Home,
   },
   {
-    path: "/sketch/:name",
+    path: "/sketch/:sketch",
     name: "sketch",
     component: () => import("@/pages/Sketch.vue"),
   },
