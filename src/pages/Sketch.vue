@@ -1,5 +1,6 @@
 <script lang="ts">
 import p5 from "p5";
+import $ from "jquery";
 
 const modules = import.meta.glob("#/**/*.ts");
 
@@ -21,12 +22,14 @@ export default {
     },
   },
 
-  async created() {
+  async mounted() {
     this.loadSketch();
     this.$watch(() => this.$route.params, this.loadSketch);
+    $("#sketch").on("touchmove", (e) => {
+      e.preventDefault();
+    });
   },
 };
-// console.log(this.$route.params.sketch);
 </script>
 
 <template>
