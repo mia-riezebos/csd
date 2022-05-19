@@ -15,6 +15,7 @@ import TheSketchList from "@/components/TheSketchList.vue";
 #app {
   display: flex;
   flex-direction: column;
+  align-items: center;
   font-family: Montserrat, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -35,7 +36,7 @@ import TheSketchList from "@/components/TheSketchList.vue";
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin: auto;
+  margin: 16px;
   padding: 8px 24px;
   max-width: 960px;
 }

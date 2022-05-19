@@ -40,10 +40,9 @@ export class Canvas {
   }
 
   resize() {
-    let w = document.documentElement.clientWidth;
-    let h = document.documentElement.clientHeight;
+    this.w = Math.min(700, document.body.clientWidth - 80);
 
-    this.p.resizeCanvas(w, h);
+    this.p.resizeCanvas(this.w, this.h);
   }
 }
 

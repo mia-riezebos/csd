@@ -14,7 +14,7 @@ export default (p: p5) => {
     map[i] = new Ball(p, i == 0 ? 50 : undefined); // if the ball is the first object in the array, use diameter of 50, else use undefined.
   }
 
-  console.log(map);
+  // console.log(map);
 
   // let ballA = new object.Ball(50);
   // let ballB = new object.Ball();
@@ -53,5 +53,9 @@ export default (p: p5) => {
 
   p.mouseReleased = () => {
     click = false;
+  };
+
+  p.windowResized = () => {
+    canvas.resize();
   };
 };
