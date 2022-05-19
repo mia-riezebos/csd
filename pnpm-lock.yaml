@@ -4,6 +4,7 @@ specifiers:
   '@types/p5': ^1.4.2
   '@vitejs/plugin-vue': ^2.3.1
   dotenv: ^16.0.0
+  jquery: ^3.6.0
   p5: ^1.4.1
   socket.io: ^4.5.0
   socket.io-client: ^4.5.0
@@ -16,6 +17,7 @@ specifiers:
 dependencies:
   '@types/p5': 1.4.2
   dotenv: 16.0.0
+  jquery: 3.6.0
   p5: 1.4.1
   socket.io: 4.5.0
   socket.io-client: 4.5.0
@@ -505,6 +507,10 @@ packages:
     dependencies:
       has: 1.0.3
     dev: true
+
+  /jquery/3.6.0:
+    resolution: {integrity: sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==}
+    dev: false
 
   /magic-string/0.25.9:
     resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==}
