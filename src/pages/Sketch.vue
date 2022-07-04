@@ -17,8 +17,8 @@ export default {
       this.name = this.$route.params.sketch;
       this.sketch?.remove();
       if (!this.name) return;
-      let response = await modules[`../../sketches/${this.name}/sketch.ts`]();
-      this.sketch = new p5(response.default, document.getElementById("sketch"));
+      let response = await modules[`../../sketches/${this.name}/p.ts`]();
+      this.sketch = response.createSketch(document.getElementById("sketch"));
     },
   },
 
