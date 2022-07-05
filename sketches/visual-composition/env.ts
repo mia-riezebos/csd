@@ -3,8 +3,8 @@ import p5 from "p5";
 const CANVAS = {
   WIDTH: 1024,
   HEIGHT: 1024,
-  FRAMERATE: 60,
-  RESOLUTION: 4,
+  FRAMERATE: 144,
+  RESOLUTION: 16,
   PIXEL_RATIO: 0,
   COLUMNS: 0,
   ROWS: 0,
