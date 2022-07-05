@@ -3,17 +3,21 @@ export default {
   data() {
     return {
       sketches: null,
+      branch: null,
     };
   },
   async created() {
-    await fetch("https://api.github.com/repos/mia-cx/csd/contents/sketches")
+    await fetch(`/HEAD`).then((res) => res.text()).then((text) => {
+      this.branch = text.trim().split('/')[2];
+    });
+    console.log(`this.branch: ${this.branch}`);
+    await fetch(`https://api.github.com/repos/mia-cx/csd/contents/sketches?ref=${this.branch}`)
       .then((res) => res.json())
       .then((files) => {
         let dirs = files.filter((file) => {
           return file.type === "dir";
         });
         this.sketches = dirs;
-        console.log(this.sketches);
       })
       .catch((err) => {});
   },
