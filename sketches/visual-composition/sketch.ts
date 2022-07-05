@@ -33,6 +33,9 @@ export default (p: p5) => {
   let noiseDisplay;
   let particlesDisplay;
 
+  let evolveRates = [];
+  let rates = [];
+
   p.setup = function () {
     p.colorMode(p.HSL);
 
@@ -60,13 +63,26 @@ export default (p: p5) => {
   };
 
   p.draw = function () {
-    if (EVOLUTION.STATE && p.frameRate() < 15) {
-      CANVAS.RESOLUTION = Math.floor(CANVAS.RESOLUTION * 2);
-      CANVAS.PIXEL_RATIO = CANVAS.RESOLUTION ** -1;
-      [CANVAS.COLUMNS, CANVAS.ROWS] = [
-        Math.floor(CANVAS.WIDTH * CANVAS.PIXEL_RATIO),
-        Math.floor(CANVAS.HEIGHT * CANVAS.PIXEL_RATIO),
-      ];
+    if (rates.length < CANVAS.FRAMERATE) rates.push(p.frameRate());
+    else {
+      rates.shift();
+      rates.push(p.frameRate());
+    }
+
+    if (EVOLUTION.STATE) {
+      evolveRates.push(p.frameRate());
+      if (evolveRates.length > CANVAS.FRAMERATE) evolveRates.shift();
+      let average = evolveRates.reduce((a, b) => a + b, 0) / evolveRates.length;
+
+      if (evolveRates.length > 15 && average < 60) {
+        CANVAS.RESOLUTION = Math.floor(CANVAS.RESOLUTION * 2);
+        CANVAS.PIXEL_RATIO = CANVAS.RESOLUTION ** -1;
+        [CANVAS.COLUMNS, CANVAS.ROWS] = [
+          Math.floor(CANVAS.WIDTH * CANVAS.PIXEL_RATIO),
+          Math.floor(CANVAS.HEIGHT * CANVAS.PIXEL_RATIO),
+        ];
+        evolveRates = [];
+      }
     }
 
     p.background(0, 0, 0);
@@ -77,6 +93,10 @@ export default (p: p5) => {
       noiseDisplay.strokeWeight(0);
       showNoise(noiseDisplay, noiseMode, drawMode);
     }
+
+    noiseDisplay.stroke(0, 100, 100, 0.5);
+    noiseDisplay.strokeWeight(2);
+    // showField(noiseDisplay);
 
     Particle.particles.forEach((particle) => {
       particle.show();
@@ -106,8 +126,11 @@ export default (p: p5) => {
       return;
     EVOLUTION.STATE = !EVOLUTION.STATE;
     if (EVOLUTION.STATE) {
+      console.debug("starting noise evolution, simplifying image");
       evolveNoise(p, noiseMode);
+      evolveRates = [];
     } else {
+      console.debug("stopping noise evolution, generating fullres image");
       initNoise(p, noiseMode);
       showNoise(noiseDisplay, noiseMode, DRAW_MODES.PIXELS);
     }
@@ -118,6 +141,12 @@ export default (p: p5) => {
     p.stroke(255);
     p.strokeWeight(2);
     p.textAlign(p.LEFT, p.TOP);
-    p.text(`FPS: ${p.floor(p.frameRate())}`, 10, 10);
+    p.text(
+      `FPS: ${p.floor(p.frameRate())}\nAVG: ${p.floor(
+        rates.reduce((a, b) => a + b, 0) / rates.length
+      )}`,
+      10,
+      10
+    );
   }
 };
