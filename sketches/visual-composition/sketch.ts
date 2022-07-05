@@ -11,17 +11,17 @@
  *
  * function to set BPM, play, framerate, etc.
  */
-
-import { frameRate } from "#/bouncing-ball/environment";
 import p5 from "p5";
-import { CANVAS, DRAW_MODES, PARTICLE_COUNT } from "./env";
-import {
+import { CANVAS, COLOR, DRAW_MODES, PARTICLE_COUNT } from "./env";
+import noise, {
   NOISE,
   EVOLUTION,
-  initNoise,
+  redrawNoise,
   evolveNoise,
   showNoise,
   showField,
+  initNoise,
+  initOctave,
 } from "./noise";
 import Particle from "./particle";
 
@@ -39,44 +39,84 @@ export default (p: p5) => {
   p.setup = function () {
     p.colorMode(p.HSL);
 
+    NOISE.OCTAVES = p.createSlider(1, NOISE.MAX_OCTAVES, 4, 1);
+
+    NOISE.OCTAVES.mousePressed(() => {
+      CANVAS.RESOLUTION(CANVAS.BASE_RESOLUTION);
+      CANVAS.REDRAW = true;
+    }).mouseReleased(() => {
+      if (EVOLUTION.STATE) return;
+      CANVAS.REDRAW = false;
+      CANVAS.RESOLUTION(CANVAS.BASE_RESOLUTION);
+
+      redrawNoise(noiseDisplay);
+      showNoise(noiseDisplay, DRAW_MODES.PIXELS);
+    });
+
     p.createCanvas(CANVAS.WIDTH, CANVAS.HEIGHT);
+
+    COLOR.PHASE_SHIFT = p.createSlider(0, 360, 85, 1);
+
+    COLOR.PHASE_SHIFT.mousePressed(() => {
+      CANVAS.RESOLUTION(CANVAS.BASE_RESOLUTION);
+      CANVAS.REDRAW = true;
+    }).mouseReleased(() => {
+      if (EVOLUTION.STATE) return;
+      CANVAS.REDRAW = false;
+      CANVAS.RESOLUTION(CANVAS.BASE_RESOLUTION);
+
+      redrawNoise(noiseDisplay);
+      showNoise(noiseDisplay, DRAW_MODES.PIXELS);
+    });
 
     noiseDisplay = p.createGraphics(CANVAS.WIDTH, CANVAS.HEIGHT);
     noiseDisplay.colorMode(p.HSL);
     particlesDisplay = p.createGraphics(CANVAS.WIDTH, CANVAS.HEIGHT);
     particlesDisplay.colorMode(p.HSL);
 
+    initNoise(noiseDisplay);
+
     p.frameRate(CANVAS.FRAMERATE);
-    initNoise(p, noiseMode);
 
     for (let i = 0; i < PARTICLE_COUNT; i++) {
-      Particle.particles.push(new Particle(particlesDisplay));
+      let particle = new Particle(particlesDisplay);
+      Particle.particles.push(particle);
+      particle.update();
     }
 
     p.noStroke();
     p.strokeWeight(0);
-    showNoise(noiseDisplay, noiseMode, DRAW_MODES.PIXELS);
+    showNoise(noiseDisplay, DRAW_MODES.PIXELS);
 
     p.stroke(255, 10);
     p.strokeWeight(2);
-    // showField(p, noiseMode);
+    // showField(p);
+
+    for (let i = 0; i < NOISE.MAX_OCTAVES; i++) {
+      setTimeout(() => initOctave(p, i), 100);
+    }
   };
 
+  let predraw = function () {};
+
   p.draw = function () {
+    if (p.frameCount === 0) {
+      predraw();
+    }
+
     if (rates.length < CANVAS.FRAMERATE) rates.push(p.frameRate());
     else {
       rates.shift();
       rates.push(p.frameRate());
     }
 
-    if (EVOLUTION.STATE) {
+    if (CANVAS.REDRAW) {
       evolveRates.push(p.frameRate());
       if (evolveRates.length > CANVAS.FRAMERATE) evolveRates.shift();
       let average = evolveRates.reduce((a, b) => a + b, 0) / evolveRates.length;
-
       if (evolveRates.length > 15 && average < 60) {
-        CANVAS.RESOLUTION = Math.floor(CANVAS.RESOLUTION * 2);
-        CANVAS.PIXEL_RATIO = CANVAS.RESOLUTION ** -1;
+        CANVAS.RESOLUTION(Math.floor(CANVAS.RESOLUTION() * 2));
+        CANVAS.PIXEL_RATIO = CANVAS.RESOLUTION() ** -1;
         [CANVAS.COLUMNS, CANVAS.ROWS] = [
           Math.floor(CANVAS.WIDTH * CANVAS.PIXEL_RATIO),
           Math.floor(CANVAS.HEIGHT * CANVAS.PIXEL_RATIO),
@@ -87,16 +127,20 @@ export default (p: p5) => {
 
     p.background(0, 0, 0);
 
-    if (EVOLUTION.STATE) {
+    if (CANVAS.REDRAW) {
+      initNoise(noiseDisplay);
+
       noiseDisplay.background(0, 0, 0);
       noiseDisplay.noStroke();
       noiseDisplay.strokeWeight(0);
-      showNoise(noiseDisplay, noiseMode, drawMode);
+      showNoise(noiseDisplay, drawMode);
     }
 
-    noiseDisplay.stroke(0, 100, 100, 0.5);
+    noiseDisplay.stroke(0, 100, 100, 0.2);
     noiseDisplay.strokeWeight(2);
     // showField(noiseDisplay);
+    // p.tint(255, 0.5);
+    p.image(noiseDisplay, 0, 0);
 
     Particle.particles.forEach((particle) => {
       particle.show();
@@ -104,7 +148,7 @@ export default (p: p5) => {
       particle.applyForce();
     });
 
-    p.image(noiseDisplay, 0, 0);
+    // p.tint(255, 1);
     p.image(particlesDisplay, 0, 0);
 
     showFrameRate();
@@ -127,12 +171,26 @@ export default (p: p5) => {
     EVOLUTION.STATE = !EVOLUTION.STATE;
     if (EVOLUTION.STATE) {
       console.debug("starting noise evolution, simplifying image");
-      evolveNoise(p, noiseMode);
+      evolveNoise(noiseDisplay);
       evolveRates = [];
     } else {
-      console.debug("stopping noise evolution, generating fullres image");
-      initNoise(p, noiseMode);
-      showNoise(noiseDisplay, noiseMode, DRAW_MODES.PIXELS);
+      console.debug("stopping noise evolution...");
+    }
+  };
+
+  p.keyPressed = () => {
+    if (p.key == "n") {
+      Particle.particles.push(
+        new Particle(p, {
+          mass: 10,
+          pos: p.createVector(p.mouseX, p.mouseY),
+          color: p.color(0, 0, 100, 0.5),
+        })
+      );
+    }
+    if (p.key == "p") {
+      redrawNoise(noiseDisplay);
+      showNoise(noiseDisplay, DRAW_MODES.PIXELS);
     }
   };
 
