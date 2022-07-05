@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "prepare": "copy /y .\\.git\\HEAD .\\public\\HEAD",
+    "head": "copy /y .\\.git\\HEAD .\\public\\HEAD",
     "preview": "vite preview"
   },
   "dependencies": {
