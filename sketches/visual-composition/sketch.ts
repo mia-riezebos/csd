@@ -114,7 +114,7 @@ export default (p: p5) => {
       evolveRates.push(p.frameRate());
       if (evolveRates.length > CANVAS.FRAMERATE) evolveRates.shift();
       let average = evolveRates.reduce((a, b) => a + b, 0) / evolveRates.length;
-      if (evolveRates.length > 15 && average < 60) {
+      if (evolveRates.length > 15 && average < CANVAS.FRAMERATE * 0.25) {
         CANVAS.RESOLUTION(Math.floor(CANVAS.RESOLUTION() * 2));
         CANVAS.PIXEL_RATIO = CANVAS.RESOLUTION() ** -1;
         [CANVAS.COLUMNS, CANVAS.ROWS] = [
