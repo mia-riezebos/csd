@@ -4,8 +4,8 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "vite",
-    "build": "cp -f ./.git/HEAD ./public/HEAD && vue-tsc --noEmit && vite build",
-    "winbuild": "copy /y .\\.git\\HEAD .\\public\\HEAD && vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit && vite build",
+    "prepare": "copy /y .\\.git\\HEAD .\\public\\HEAD",
     "preview": "vite preview"
   },
   "dependencies": {
