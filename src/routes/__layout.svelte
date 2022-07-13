@@ -1,5 +1,16 @@
+<script context="module" lang="ts">
+
+  export const prerender = true;
+
+
+  
+</script>
+
 <script lang="ts">
-  import Sketches from '$lib/sketches.svelte';
+  import Sketches from '$lib/Navigation.svelte';
+
+  import sketchlist from '@/sketches.json';
+  export let sketches: string[] = sketchlist;
 </script>
 
 <svelte:head>
@@ -16,7 +27,7 @@
 <main id="app">
   <div class="container">
     <slot />
-    <Sketches />
+    <Sketches sketches={sketches} />
   </div>
 </main>
 
