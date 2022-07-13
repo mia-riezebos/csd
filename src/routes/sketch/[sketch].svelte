@@ -31,6 +31,9 @@
       document.getElementById('sketch')!.ontouchmove = (e) => {
         e.preventDefault();
       };
+      return () => {
+        sketch.remove();
+      };
     });
   }
   async function loadSketch() {
