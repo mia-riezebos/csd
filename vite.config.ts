@@ -11,5 +11,8 @@ export default defineConfig({
       "#": resolve(__dirname, "./sketches"),
     },
   },
+  build: {
+    outDir: "dist/cloudflare",
+  },
   plugins: [vue()],
 });
