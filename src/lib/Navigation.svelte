@@ -1,19 +1,3 @@
-<script context="module" lang="ts">
-  import type { Load } from '@sveltejs/kit';
-
-  export const prerender = true;
-
-  export let load: Load = async ({ fetch }) => {
-    const response = await fetch(`/api/sketches.json`);
-    const json = await response.json();
-    return {
-      props: {
-        sketches: json.sketches
-      }
-    };
-  };
-</script>
-
 <script lang="ts">
   export let sketches: string[] = [];
 </script>
