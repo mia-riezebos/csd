@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-  // export const prerender = true;
+  export const prerender = true;
 
   /** @type {import('./__types/[sketch]').Load} */
   export async function load({ params }) {
@@ -15,9 +15,9 @@
   import { browser } from '$app/env';
 
   import p5 from 'p5';
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
 
-  const modules = import.meta.glob('#/**/*.ts');
+  const modules = import.meta.glob("#/**/*.ts");
 
   export let name: string;
   export let sketch: p5;
@@ -26,21 +26,26 @@
 
   if (browser) {
     onMount(() => {
+      
       loadSketch();
 
       document.getElementById('sketch')!.ontouchmove = (e) => {
         e.preventDefault();
       };
+
       return () => {
         sketch.remove();
       };
+    });
+    onDestroy(() => {
+      console.log('the component is being destroyed');
     });
   }
   async function loadSketch() {
     sketch?.remove();
     console.log(`../../sketches/${name}/sketch.ts`);
-    let response = await modules[`../../../sketches/${name}/sketch.ts`]();
-    sketch = new p5(response.default, document.getElementById('sketch') as HTMLElement | undefined);
+    let response = await modules[`../../../sketches/${name}/p.ts`]();
+    sketch = response.createSketch(document.getElementById("sketch"));
   }
 </script>
 
