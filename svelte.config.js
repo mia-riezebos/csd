@@ -9,6 +9,7 @@ const config = {
 
   kit: {
     adapter: adapter(),
+    browser: { router: true },
 
     // Override http methods in the Todo forms
     methodOverride: {
