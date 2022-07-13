@@ -6,8 +6,14 @@ import { resolve } from 'path';
 const config = {
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src'),
+      '@': resolve(__dirname, './static'),
       '#': resolve(__dirname, './sketches')
+    }
+  },
+
+  server: {
+    fs: {
+      allow: ['sketches/**/*.ts']
     }
   },
   plugins: [sveltekit()]
