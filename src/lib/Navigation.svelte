@@ -2,8 +2,8 @@
   export let sketches: string[] = [];
 </script>
 
-<section id="navigation">
-  <ul>
+<section>
+  <ul id="navigation">
     <li>
       <a href="/">Home</a>
     </li>
