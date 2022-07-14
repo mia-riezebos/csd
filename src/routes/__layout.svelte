@@ -5,7 +5,7 @@
 <script lang="ts">
   import Sketches from '$lib/Navigation.svelte';
 
-  import sketchlist from '@/sketches.json';
+  import sketchlist from "@/sketches.json";
   export let sketches: string[] = sketchlist;
 </script>
 

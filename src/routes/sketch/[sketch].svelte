@@ -17,7 +17,7 @@
   import p5 from 'p5';
   import { onMount, onDestroy } from 'svelte';
 
-  const modules = import.meta.glob("#/**/*.ts");
+  const modules = import.meta.glob("../../sketches/**/*.ts");
 
   export let name: string;
   export let sketch: p5;
@@ -39,13 +39,14 @@
     });
     onDestroy(() => {
       console.log('the component is being destroyed');
+      sketch.remove();
     });
   }
   async function loadSketch() {
     sketch?.remove();
     console.log(`../../sketches/${name}/sketch.ts`);
-    let response = await modules[`../../../sketches/${name}/p.ts`]();
-    sketch = response.createSketch(document.getElementById("sketch"));
+    // let response = await modules[`../../../sketches/${name}/p.ts`]();
+    // sketch = response.createSketch(document.getElementById("sketch"));
   }
 </script>
 
