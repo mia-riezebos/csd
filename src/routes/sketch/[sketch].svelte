@@ -17,7 +17,7 @@
   import p5 from 'p5';
   import { onMount, onDestroy } from 'svelte';
 
-  const modules = import.meta.glob("../../sketches/**/*.ts");
+  const modules = import.meta.glob("../../../sketches/**/*.ts");
 
   export let name: string;
   export let sketch: p5;
@@ -32,14 +32,9 @@
       document.getElementById('sketch')!.ontouchmove = (e) => {
         e.preventDefault();
       };
-
-      return () => {
-        sketch.remove();
-      };
     });
     onDestroy(() => {
       console.log('the component is being destroyed');
-      sketch.remove();
     });
   }
   async function loadSketch() {
