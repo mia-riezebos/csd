@@ -7,33 +7,24 @@ export default {
     };
   },
   async created() {
-    await fetch(`/HEAD`).then((res) => res.text()).then((text) => {
-      this.branch = text.trim().split('/')[2];
-    });
-    console.log(`this.branch: ${this.branch}`);
-    await fetch(`https://api.github.com/repos/mia-cx/csd/contents/sketches?ref=${this.branch}`)
-      .then((res) => res.json())
-      .then((files) => {
-        let dirs = files.filter((file) => {
-          return file.type === "dir";
-        });
-        this.sketches = dirs;
-      })
-      .catch((err) => {});
+    const sketchList = await fetch(`/sketches.json`);
+    this.sketches = await sketchList.json();
   },
 };
 </script>
 
 <template>
   <ul class="nav-list">
-    <li><router-link to="/">Home</router-link></li>
+    <li>
+      <router-link to="/">Home</router-link>
+    </li>
     <li v-if="sketches">
       Sketches
       <ul class="sketches">
-        <li v-for="sketch in sketches" v-bind:key="sketch.name">
-          <router-link :to="`/sketch/${sketch.name}`">{{
-            sketch.name
-          }}</router-link>
+        <li v-for="sketch in sketches" v-bind:key="sketch">
+          <router-link :to="`/sketch/${sketch}`">{{
+            sketch
+            }}</router-link>
         </li>
       </ul>
     </li>

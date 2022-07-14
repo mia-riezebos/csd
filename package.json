@@ -3,11 +3,11 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
-    "head": "copy /y .\\.git\\HEAD .\\public\\HEAD",
-    "preview": "vite preview"
+    "dev": "node sketches.js && vite",
+    "build": "node sketches.js && vue-tsc --noEmit && vite build",
+    "preview": "node sketches.js && vite preview"
   },
+  "type": "module",
   "dependencies": {
     "@types/p5": "^1.4.2",
     "alea": "^1.0.1",
